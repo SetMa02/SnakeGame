@@ -15,12 +15,13 @@ public class PlayerController : MonoBehaviour
     private float sizeZ;
     [SerializeField] GameObject foodPool;
     Random random = new Random();
-
-
-
-
+    private UIController controller;
 
     private Transform _transform;
+
+    #region Singleton
+    public static PlayerController Insanse { get; set; }
+    #endregion
 
     private void Start()
     {
@@ -28,13 +29,39 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    public void initUiController(UIController uIController)
+    {
+        controller = uIController;
+    }
+
     private void Update()
     {
         MoveSnake(_transform.position + transform.forward * speed * 0.1f);
 
         float angel = Input.GetAxis("Horizontal") * 2;
+        Debug.Log(angel.ToString());
         _transform.Rotate(0, angel, 0);
+
+        turnLeft();
+        turnRight();
     }
+
+    private void turnLeft()
+    {
+        if(controller.Left.IsPressed)
+        _transform.Rotate(0, 2 * -1, 0);
+
+        Debug.Log("Поаорасиваю налево...");
+    }
+
+    private void turnRight()
+    {
+        if (controller.Right.IsPressed)
+            _transform.Rotate(0, 2, 0);
+
+        Debug.Log("Поаорасиваю напрво...");
+    }
+
 
     private void MoveSnake(Vector3 newPosition)
     {
