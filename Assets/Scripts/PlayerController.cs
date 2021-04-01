@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private float sizeZ;
     [SerializeField] GameObject foodPool;
     Random random = new Random();
-    private UIController controller;
+    private int directionMove;
 
     private Transform _transform;
 
@@ -26,12 +26,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         _transform = GetComponent<Transform>();
-        
-    }
-
-    public void initUiController(UIController uIController)
-    {
-        controller = uIController;
+        directionMove = 0;
     }
 
     private void Update()
@@ -42,24 +37,27 @@ public class PlayerController : MonoBehaviour
         Debug.Log(angel.ToString());
         _transform.Rotate(0, angel, 0);
 
-        turnLeft();
-        turnRight();
+        if (directionMove == 1)
+        {
+            _transform.Rotate(0, 2 * -1, 0);
+            Debug.Log("Поворачиваю налево...");
+        }
+        else if (directionMove == 0)
+        {
+            transform.Rotate(0, 2, 0);
+
+            Debug.Log("Поворачиваю  напрaво...");
+        }
+        else if (directionMove == 2)
+        {
+            return;
+        }
+
     }
 
-    private void turnLeft()
+    public void SnakeController(int pos)
     {
-        if(controller.Left.IsPressed)
-        _transform.Rotate(0, 2 * -1, 0);
-
-        Debug.Log("Поаорасиваю налево...");
-    }
-
-    private void turnRight()
-    {
-        if (controller.Right.IsPressed)
-            _transform.Rotate(0, 2, 0);
-
-        Debug.Log("Поаорасиваю напрво...");
+        directionMove = pos;
     }
 
 
@@ -97,17 +95,9 @@ public class PlayerController : MonoBehaviour
             tails.Add(bone.transform);
 
             sizeX = Random.Range(-19f, 17.5f);
-            sizeZ = Random.Range(-18.0f, 19.0f);
-            if(sizeZ < -18f)
-            { 
-                while (sizeZ < -18f)
-                {
-                    sizeZ = Random.Range(-18.0f, 19.0f);
-                }
-            }
+            sizeZ = Random.Range(-18, 19);
 
-
-            collision.gameObject.transform.position = new Vector3(sizeX, 0, sizeZ);
+            collision.gameObject.transform.position = new Vector3(sizeX, 1, Random.Range(-5, 19f));
 
         }
         if(collision.gameObject.tag == "bone")
