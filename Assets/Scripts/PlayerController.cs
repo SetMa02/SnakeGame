@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject foodPool;
     Random random = new Random();
     private int directionMove;
-
+    public GameObject deathScreen;
     private Transform _transform;
 
     #region Singleton
@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         _transform = GetComponent<Transform>();
-        directionMove = 0;
+        directionMove = 2;
     }
 
     private void Update()
@@ -34,19 +34,19 @@ public class PlayerController : MonoBehaviour
         MoveSnake(_transform.position + transform.forward * speed * 0.1f);
 
         float angel = Input.GetAxis("Horizontal") * 2;
-        Debug.Log(angel.ToString());
+        
         _transform.Rotate(0, angel, 0);
 
         if (directionMove == 1)
         {
             _transform.Rotate(0, 2 * -1, 0);
-            Debug.Log("Поворачиваю налево...");
+           
         }
         else if (directionMove == 0)
         {
             transform.Rotate(0, 2, 0);
 
-            Debug.Log("Поворачиваю  напрaво...");
+           
         }
         else if (directionMove == 2)
         {
@@ -102,7 +102,8 @@ public class PlayerController : MonoBehaviour
         }
         if(collision.gameObject.tag == "bone")
         {
-            Destroy(gameObject);
+            deathScreen.SetActive(true);
+            Time.timeScale = 0;
         }
     }
 }
